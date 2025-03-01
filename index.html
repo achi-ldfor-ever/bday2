@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mom's Birthday Invitation</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #fdf6e3;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .invitation {
+            padding: 20px;
+            margin: 50px auto;
+            background: white;
+            border-radius: 15px;
+            width: 80%;
+            max-width: 500px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+        }
+        h1 {
+            color: #ff6f61;
+        }
+        .poem {
+            font-size: 18px;
+            color: #555;
+        }
+        .bear-image {
+            width: 100%;
+            max-width: 300px;
+            margin: 20px 0;
+        }
+        button {
+            background-color: #ff6f61;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #d9534f;
+        }
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="invitation">
+        <h1>🎉 You're Invited! 🎈</h1>
+        <p class="poem">A day of joy, a day so bright,<br> Come celebrate with love and light!<br> Cakes, laughter, and hugs so tight,<br> Let’s make this day a pure delight! 🎂✨</p>
+        <img src="bear_party.png" alt="Cartoon bears enjoying a party" class="bear-image">
+        <button id="celebrateBtn">Click to Celebrate</button>
+        <canvas id="confetti"></canvas>
+    </div>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            gsap.to(".invitation", { opacity: 1, duration: 1.5, y: -20 });
+        });
+
+        document.getElementById("celebrateBtn").addEventListener("click", function() {
+            launchConfetti();
+        });
+
+        function launchConfetti() {
+            const confettiCanvas = document.getElementById("confetti");
+            const ctx = confettiCanvas.getContext("2d");
+            confettiCanvas.width = window.innerWidth;
+            confettiCanvas.height = window.innerHeight;
+            
+            const confettiPieces = Array.from({ length: 100 }).map(() => ({
+                x: Math.random() * window.innerWidth,
+                y: Math.random() * window.innerHeight - window.innerHeight,
+                size: Math.random() * 3 + 1,
+                speed: Math.random() * 3 + 2,
+                color: `hsl(${Math.random() * 360}, 70%, 80%)`
+            }));
+
+            function drawConfetti() {
+                ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+                confettiPieces.forEach(piece => {
+                    ctx.fillStyle = piece.color;
+                    ctx.fillRect(piece.x, piece.y, piece.size, piece.size);
+                    piece.y += piece.speed;
+                    if (piece.y > window.innerHeight) piece.y = -piece.size;
+                });
+                requestAnimationFrame(drawConfetti);
+            }
+            drawConfetti();
+        }
+    </script>
+</body>
+</html>
